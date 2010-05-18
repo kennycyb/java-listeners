@@ -44,10 +44,6 @@ public final class BasicListenerManager<E> implements IListenerManager<E> {
         mInvoker = listenerClass.cast(e.create());
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.sicpa.standard.common.event.IListenerManager#addListener(java.lang.Object)
-     */
     @Override
     public void addListener(E listener) {
         synchronized (mListeners) {
@@ -55,19 +51,11 @@ public final class BasicListenerManager<E> implements IListenerManager<E> {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.sicpa.standard.common.event.IListenerManager#invoker()
-     */
     @Override
     public E invoker() {
         return mInvoker;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.sicpa.standard.common.event.IListenerManager#dispose()
-     */
     @Override
     public void dispose() {
         synchronized (mListeners) {
@@ -75,10 +63,6 @@ public final class BasicListenerManager<E> implements IListenerManager<E> {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.sicpa.standard.common.event.IListenerManager#removeListener(java.lang.Object)
-     */
     @Override
     public void removeListener(E listener) {
         synchronized (mListeners) {

@@ -90,13 +90,6 @@ public final class EventListenerProxy implements IEventListener {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.sicpa.standard.common.event.IEventListener#onEvent(com.sicpa.standard
-	 * .common.event.IEventSender, com.sicpa.standard.common.event.IEventArgs)
-	 */
 	@Override
 	public void onEvent(IEventSender sender, IEventArgs args) {
 

@@ -20,14 +20,6 @@ public final class BasicEventManager implements IEventManager {
 	public BasicEventManager() {
 		mInvoker = new IEventListener() {
 
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * com.sicpa.standard.common.event.IEventListener#onEvent(com.sicpa
-			 * .standard.common. event.IEventSender,
-			 * com.sicpa.standard.common.event.IEventArgs)
-			 */
 			@Override
 			public void onEvent(IEventSender sender, IEventArgs args) {
 				synchronized (mListeners) {
@@ -39,13 +31,6 @@ public final class BasicEventManager implements IEventManager {
 		};
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.sicpa.standard.common.event.IListenerManager#addListener(java.lang
-	 * .Object)
-	 */
 	@Override
 	public void addListener(IEventListener listener) {
 
@@ -58,23 +43,11 @@ public final class BasicEventManager implements IEventManager {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.sicpa.standard.common.event.IListenerManager#invoker()
-	 */
 	@Override
 	public IEventListener invoker() {
 		return mInvoker;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.sicpa.standard.common.event.IListenerManager#removeListener(java.
-	 * lang.Object)
-	 */
 	@Override
 	public void removeListener(IEventListener listener) {
 
@@ -93,11 +66,6 @@ public final class BasicEventManager implements IEventManager {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.sicpa.standard.common.event.IEventManager#dispose()
-	 */
 	@Override
 	public void dispose() {
 		synchronized (mListeners) {
