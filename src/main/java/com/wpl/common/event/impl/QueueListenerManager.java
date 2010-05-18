@@ -90,13 +90,6 @@ public final class QueueListenerManager<E> implements IListenerManager<E> {
 		mEventDispatchService = Executors.newSingleThreadExecutor();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.sicpa.standard.common.event.IListenerManager#addListener(java.lang
-	 * .Object)
-	 */
 	@Override
 	public void addListener(E listener) {
 
@@ -111,21 +104,11 @@ public final class QueueListenerManager<E> implements IListenerManager<E> {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.sicpa.standard.common.event.IListenerManager#invoker()
-	 */
 	@Override
 	public E invoker() {
 		return mInvoker;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.sicpa.standard.common.event.IListenerManager#dispose()
-	 */
 	@Override
 	public void dispose() {
 
@@ -136,13 +119,6 @@ public final class QueueListenerManager<E> implements IListenerManager<E> {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.sicpa.standard.common.event.IListenerManager#removeListener(java.
-	 * lang.Object)
-	 */
 	@Override
 	public void removeListener(E listener) {
 
