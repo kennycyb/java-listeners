@@ -44,18 +44,27 @@ public final class QueueEventManager implements IEventManager {
 
 	@Override
 	public void addListener(final IEventListener listener) {
+
+		if (listener == null) {
+			return;
+		}
+
 		synchronized (mListeners) {
 			mListeners.add(new EventListenerProxy(listener));
 		}
 	}
 
-	@Override
-	public IEventListener invoker() {
-		return mInvoker;
+	public void invoke(final Object sender, final Serializable args) {
+		mInvoker.onEvent(sender, args);
 	}
 
 	@Override
 	public void removeListener(final IEventListener listener) {
+
+		if (listener == null) {
+			return;
+		}
+
 		synchronized (mListeners) {
 
 			for (final EventListenerProxy invoker : mListeners) {

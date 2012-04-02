@@ -8,9 +8,9 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-import com.wpl.common.event.IListenerManager;
+import com.wpl.common.event.ICustomEventManager;
 
-public final class BasicListenerManager<E> implements IListenerManager<E> {
+public final class BasicListenerManager<E> implements ICustomEventManager<E> {
 
 	private final List<E> mListeners = new ArrayList<E>();
 	private final Interceptor mInterceptor = new Interceptor();

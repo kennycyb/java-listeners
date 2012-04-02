@@ -24,13 +24,6 @@ public interface IListenerManager<E> {
 	public void removeListener(E listener);
 
 	/**
-	 * Get the invoker.
-	 * 
-	 * @return
-	 */
-	public E invoker();
-
-	/**
 	 * Dispose this event manager. Once it's disposed, event will not be
 	 * dispatched. It will be useless after "dispose" has been called. This
 	 * method allows the event manager to release any resources, e.g. TCP
