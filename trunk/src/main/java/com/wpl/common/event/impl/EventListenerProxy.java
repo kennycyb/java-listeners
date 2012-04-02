@@ -1,5 +1,6 @@
 package com.wpl.common.event.impl;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -9,10 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wpl.common.event.EventHandler;
-import com.wpl.common.event.IEventArgs;
 import com.wpl.common.event.IEventListener;
-import com.wpl.common.event.IEventSender;
-import com.wpl.common.event.args.EventArgs;
 
 /**
  * The dispatcher that look for "EventHandler" declared on a method of the
@@ -39,49 +37,49 @@ public final class EventListenerProxy implements IEventListener {
 	 * 
 	 * @param listener
 	 */
-	public EventListenerProxy(IEventListener listener) {
+	public EventListenerProxy(final IEventListener listener) {
 
 		mListener = listener;
 
-		Method[] methods = listener.getClass().getMethods();
+		final Method[] methods = listener.getClass().getMethods();
 
-		for (Method method : methods) {
+		for (final Method method : methods) {
 
-			EventHandler handler = method.getAnnotation(EventHandler.class);
+			final EventHandler handler = method
+					.getAnnotation(EventHandler.class);
 
 			if (handler == null) {
 				continue;
 			}
 
 			if (mHandlerMap.get(handler.value()) != null) {
-				LOGGER
-						.warn("Multiple handler for the same class type is not supported, in method"
-								+ method.getName());
+				LOGGER.warn("Multiple handler for the same class type is not supported, in method"
+						+ method.getName());
 				continue;
 			}
 			mHandlerMap.put(handler.value(), method);
 		}
 
-		Class<?>[] interfaces = listener.getClass().getInterfaces();
+		final Class<?>[] interfaces = listener.getClass().getInterfaces();
 
-		for (Class<?> clazz : interfaces) {
-			Method[] intMethods = clazz.getMethods();
+		for (final Class<?> clazz : interfaces) {
+			final Method[] intMethods = clazz.getMethods();
 
-			for (Method method : intMethods) {
-				EventHandler handler = method.getAnnotation(EventHandler.class);
+			for (final Method method : intMethods) {
+				final EventHandler handler = method
+						.getAnnotation(EventHandler.class);
 
 				if (handler == null) {
 					continue;
 				}
 
-				Method m = mHandlerMap.get(handler.value());
+				final Method m = mHandlerMap.get(handler.value());
 
 				if (m != null) {
 
 					if (!m.getName().equals(method.getName())) {
-						LOGGER
-								.warn("Multiple handler for the same class type is not supported, in method"
-										+ method.getName());
+						LOGGER.warn("Multiple handler for the same class type is not supported, in method"
+								+ method.getName());
 					}
 					continue;
 				}
@@ -91,28 +89,23 @@ public final class EventListenerProxy implements IEventListener {
 	}
 
 	@Override
-	public void onEvent(IEventSender sender, IEventArgs args) {
+	public void onEvent(final Object sender, final Serializable args) {
 
 		if (args == null) {
-			mListener.onEvent(sender, args);
+			mListener.onEvent(sender, null);
 			return;
 		}
 
 		Class<?> clazz = null;
 
-		if (args instanceof EventArgs<?>) {
-			EventArgs<?> x = (EventArgs<?>) args;
-			clazz = x.getEventType();
-		} else {
-			clazz = args.getClass();
-		}
+		clazz = args.getClass();
 
 		if (clazz == null) {
 			mListener.onEvent(sender, args);
 			return;
 		}
 
-		Method handler = mHandlerMap.get(clazz);
+		final Method handler = mHandlerMap.get(clazz);
 
 		if (handler == null) {
 
@@ -137,15 +130,15 @@ public final class EventListenerProxy implements IEventListener {
 						+ args.getClass().getName());
 			}
 
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			LOGGER.warn("Failed to dispatch event @ "
 					+ mListener.getClass().getName() + "." + handler.getName(),
 					e);
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			LOGGER.warn("Failed to dispatch event @ "
 					+ mListener.getClass().getName() + "." + handler.getName(),
 					e);
-		} catch (InvocationTargetException e) {
+		} catch (final InvocationTargetException e) {
 			LOGGER.warn("Failed to dispatch event @ "
 					+ mListener.getClass().getName() + "." + handler.getName(),
 					e);
