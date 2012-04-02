@@ -1,12 +1,11 @@
 package com.wpl.common.event.impl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wpl.common.event.IEventArgs;
 import com.wpl.common.event.IEventListener;
 import com.wpl.common.event.IEventManager;
-import com.wpl.common.event.IEventSender;
 
 public final class BasicEventManager implements IEventManager {
 
@@ -21,9 +20,9 @@ public final class BasicEventManager implements IEventManager {
 		mInvoker = new IEventListener() {
 
 			@Override
-			public void onEvent(IEventSender sender, IEventArgs args) {
+			public void onEvent(final Object sender, final Serializable args) {
 				synchronized (mListeners) {
-					for (IEventListener listener : mListeners) {
+					for (final IEventListener listener : mListeners) {
 						listener.onEvent(sender, args);
 					}
 				}
@@ -32,7 +31,7 @@ public final class BasicEventManager implements IEventManager {
 	}
 
 	@Override
-	public void addListener(IEventListener listener) {
+	public void addListener(final IEventListener listener) {
 
 		if (listener == null) {
 			return;
@@ -43,13 +42,17 @@ public final class BasicEventManager implements IEventManager {
 		}
 	}
 
+	public void invoke(final Object sender, final Serializable args) {
+		invoker().onEvent(sender, args);
+	}
+
 	@Override
 	public IEventListener invoker() {
 		return mInvoker;
 	}
 
 	@Override
-	public void removeListener(IEventListener listener) {
+	public void removeListener(final IEventListener listener) {
 
 		if (listener == null) {
 			return;
@@ -57,7 +60,7 @@ public final class BasicEventManager implements IEventManager {
 
 		synchronized (mListeners) {
 
-			for (EventListenerProxy invoker : mListeners) {
+			for (final EventListenerProxy invoker : mListeners) {
 				if (invoker.getListener() == listener) {
 					mListeners.remove(invoker);
 					break;
