@@ -15,10 +15,10 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wpl.common.event.IListenerManager;
+import com.wpl.common.event.ICustomEventManager;
 import com.wpl.common.event.annotations.FutureResultList;
 
-public final class QueueListenerManager<E> implements IListenerManager<E> {
+public final class QueueListenerManager<E> implements ICustomEventManager<E> {
 
 	private static Logger LOGGER = LoggerFactory
 			.getLogger(QueueListenerManager.class);
@@ -32,6 +32,7 @@ public final class QueueListenerManager<E> implements IListenerManager<E> {
 
 	private class Interceptor implements MethodInterceptor {
 
+		@Override
 		public Object intercept(final Object object, final Method method,
 				final Object[] args, final MethodProxy proxy) throws Throwable {
 
@@ -46,7 +47,7 @@ public final class QueueListenerManager<E> implements IListenerManager<E> {
 
 			for (final E listener : mListeners) {
 
-				Future<Object> future =
+				final Future<Object> future =
 
 				mEventDispatchService.submit(new Callable<Object>() {
 
@@ -82,8 +83,8 @@ public final class QueueListenerManager<E> implements IListenerManager<E> {
 	/**
      * 
      */
-	public QueueListenerManager(Class<E> listenerClass) {
-		Enhancer e = new Enhancer();
+	public QueueListenerManager(final Class<E> listenerClass) {
+		final Enhancer e = new Enhancer();
 		e.setSuperclass(listenerClass);
 		e.setCallback(mInterceptor);
 		mInvoker = listenerClass.cast(e.create());
@@ -91,7 +92,7 @@ public final class QueueListenerManager<E> implements IListenerManager<E> {
 	}
 
 	@Override
-	public void addListener(E listener) {
+	public void addListener(final E listener) {
 
 		// Do not allow NULL listener
 
@@ -120,7 +121,7 @@ public final class QueueListenerManager<E> implements IListenerManager<E> {
 	}
 
 	@Override
-	public void removeListener(E listener) {
+	public void removeListener(final E listener) {
 
 		if (listener == null) {
 			return;

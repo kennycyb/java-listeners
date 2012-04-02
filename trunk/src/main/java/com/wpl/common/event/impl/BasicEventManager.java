@@ -43,12 +43,7 @@ public final class BasicEventManager implements IEventManager {
 	}
 
 	public void invoke(final Object sender, final Serializable args) {
-		invoker().onEvent(sender, args);
-	}
-
-	@Override
-	public IEventListener invoker() {
-		return mInvoker;
+		mInvoker.onEvent(sender, args);
 	}
 
 	@Override
