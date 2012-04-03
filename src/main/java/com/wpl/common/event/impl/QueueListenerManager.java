@@ -54,7 +54,7 @@ public final class QueueListenerManager<E> implements ICustomEventManager<E> {
 					@Override
 					public Object call() throws Exception {
 
-						LOGGER.debug("Invoke: {0}.{1}",
+						LOGGER.debug("Invoke: {}.{}",
 								new Object[] { listener.getClass().getName(),
 										method.getName() });
 
