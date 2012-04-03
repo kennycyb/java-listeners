@@ -8,91 +8,40 @@ This is a sample code on using Event Manager.
 = Details =
 
 {{{
-public class EventManagerTests implements IEventSender {
+public class Sample01_Sender {
 
-    public class SimpleEventArgs implements IEventArgs {
+	private final IEventManager mEventManager = new BasicEventManager();
 
-        /**
-		 * 
-		 */
-        private static final long serialVersionUID = 3234184912851137576L;
+	public void addListener(final IEventListener listener) {
+		mEventManager.addListener(listener);
+	}
 
-        private final int mValue;
+	public void removeListener(final IEventListener listener) {
+		mEventManager.removeListener(listener);
+	}
 
-        public SimpleEventArgs(int value) {
-            mValue = value;
-        }
+	public void run() {
 
-        public int getValue() {
-            return mValue;
-        }
-    }
+		// Some event happened, notify the listeners
 
-    public class EventListener implements IEventListener {
-
-        IEventSender isDefaultEventHandlerSender = null;
-        IEventArgs isDefaultEventHandlerCalled = null;
-        Throwable isEventHandlerFailedException = null;
-
-        public void onEvent(IEventSender sender, IEventArgs args) {
-            isDefaultEventHandlerSender = sender;
-            isDefaultEventHandlerCalled = args;
-        }
-
-        Integer isIntegerEventCalled = null;
-
-        @EventHandler(Integer.class)
-        public void onIntegerEvent(IEventSender sender, EventArgs<Integer> args) {
-            isIntegerEventCalled = args.getData();
-        }
-
-        SimpleEventArgs isSimpleEventArgsCalled = null;
-
-        @EventHandler(SimpleEventArgs.class)
-        public void onSimpleEvent(IEventSender sender, SimpleEventArgs args) {
-            isSimpleEventArgsCalled = args;
-        }
-
-        @EventHandler(String.class)
-        public void onStringEvent(IEventSender sender, EventArgs<String> args) {
-            throw new RuntimeException();
-        }
-
-    }
-
-    @Test
-    public void emTest() {
-
-        EventListener listener = new EventListener();
-
-        IEventSender eventSender = new IEventSender() {};
-
-        QueueEventManager eventManager = new QueueEventManager();
-
-        eventManager.addListener(listener);
-
-        EventArgs<EventListener> event = new EventArgs<EventListener>(listener);
-
-        IEventListener invoker = eventManager.invoker();
-
-        invoker.onEvent(eventSender, event);
-        invoker.onEvent(eventSender, new EventArgs<Integer>(1));
-        invoker.onEvent(eventSender, new SimpleEventArgs(1));
-
-        invoker.onEvent(eventSender, new EventArgs<String>("123456"));
-
-        try {
-            Thread.sleep(5000);
-        }
-        catch (InterruptedException ignored) {}
-
-        Assert.assertEquals(eventSender, listener.isDefaultEventHandlerSender);
-        Assert.assertEquals(event, listener.isDefaultEventHandlerCalled);
-        Assert.assertEquals(event.getData(), listener);
-
-        Assert.assertEquals(1, listener.isIntegerEventCalled.intValue());
-        Assert.assertEquals(1, listener.isSimpleEventArgsCalled.getValue());
-    }
+		mEventManager.invoke(this, new TestEventArgs(1));
+	}
 }
+}}}
 
+{{{
+public class Sample01_Listener implements IEventListener {
+
+	// Default event listener
+	@Override
+	public void onEvent(final Object sender, final Serializable args) {
+	}
+
+	@EventHandler(TestEventArgs.class)
+	public void onTestEvent(final Object sender, final TestEventArgs args) {
+		// method that will be called when "TestEventArgs" is raised by the
+		// sender
+	}
+
+}
 }}}
