@@ -26,6 +26,7 @@ public final class QueueListenerManager<E> implements ICustomEventManager<E> {
 	private final List<E> mListeners = new ArrayList<E>();
 	private final Interceptor mInterceptor = new Interceptor();
 	private final E mInvoker;
+
 	private final ExecutorService mEventDispatchService;
 
 	private final ThreadLocal<List<Future<Object>>> mResults = new ThreadLocal<List<Future<Object>>>();
@@ -84,11 +85,17 @@ public final class QueueListenerManager<E> implements ICustomEventManager<E> {
      * 
      */
 	public QueueListenerManager(final Class<E> listenerClass) {
+		this(listenerClass, null);
+	}
+
+	public QueueListenerManager(final Class<E> listenerClass,
+			final ExecutorService executor) {
 		final Enhancer e = new Enhancer();
 		e.setSuperclass(listenerClass);
 		e.setCallback(mInterceptor);
 		mInvoker = listenerClass.cast(e.create());
-		mEventDispatchService = Executors.newSingleThreadExecutor();
+		mEventDispatchService = executor == null ? Executors
+				.newSingleThreadExecutor() : executor;
 	}
 
 	@Override

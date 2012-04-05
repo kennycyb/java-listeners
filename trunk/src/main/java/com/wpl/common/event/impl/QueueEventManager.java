@@ -21,7 +21,10 @@ public final class QueueEventManager implements IEventManager {
      * 
      */
 	public QueueEventManager() {
+		this(null);
+	}
 
+	public QueueEventManager(final ExecutorService executor) {
 		mInvoker = new IEventListener() {
 
 			@Override
@@ -39,7 +42,8 @@ public final class QueueEventManager implements IEventManager {
 			}
 		};
 
-		mEventDispatchService = Executors.newSingleThreadExecutor();
+		mEventDispatchService = executor == null ? Executors
+				.newSingleThreadExecutor() : executor;
 	}
 
 	@Override
@@ -54,6 +58,7 @@ public final class QueueEventManager implements IEventManager {
 		}
 	}
 
+	@Override
 	public void invoke(final Object sender, final Serializable args) {
 		mInvoker.onEvent(sender, args);
 	}
