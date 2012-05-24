@@ -36,6 +36,8 @@ public class Sample02_Sender {
 
 	public void run() {
 
+		// The following 3 events will be queued and processed by one single
+		// thread.
 		mActionListeners.invoker().actionPerformed(
 				new ActionEvent(this, 1, "test"));
 

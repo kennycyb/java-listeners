@@ -17,7 +17,10 @@ public class Sample01_Sender {
 	public void run() {
 
 		// Some event happened, notify the listeners
-
 		mEventManager.invoke(this, new TestEventArgs(1));
+
+		// this line will only executed after all listeners has processed the
+		// above event.
+		mEventManager.invoke(this, new TestEventArgs(2));
 	}
 }

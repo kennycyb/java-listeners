@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import com.wpl.common.event.IEventListener;
 import com.wpl.common.event.IEventManager;
@@ -25,6 +24,9 @@ public final class QueueEventManager implements IEventManager {
 	}
 
 	public QueueEventManager(final ExecutorService executor) {
+
+		mEventDispatchService = new PassiveExecutorService(executor, null, null);
+
 		mInvoker = new IEventListener() {
 
 			@Override
@@ -41,9 +43,6 @@ public final class QueueEventManager implements IEventManager {
 				});
 			}
 		};
-
-		mEventDispatchService = executor == null ? Executors
-				.newSingleThreadExecutor() : executor;
 	}
 
 	@Override
