@@ -28,7 +28,13 @@ public final class PassiveExecutorService extends AbstractExecutorService {
 		@Override
 		public void run() {
 
-			Thread.currentThread().setName(mActiveThreadName);
+			final String threadName = mIdleThreadName == null ? Thread
+					.currentThread().getName() : mIdleThreadName;
+
+			final String activeName = mActiveThreadName == null ? Thread
+					.currentThread().getName() : mActiveThreadName;
+
+			Thread.currentThread().setName(activeName);
 
 			Runnable command = null;
 
@@ -40,7 +46,7 @@ public final class PassiveExecutorService extends AbstractExecutorService {
 				command = mCommands.poll();
 				if (command == null) {
 					mIsInternalActive = false;
-					Thread.currentThread().setName(mIdleThreadName);
+					Thread.currentThread().setName(threadName);
 					return;
 				}
 			}
@@ -48,7 +54,7 @@ public final class PassiveExecutorService extends AbstractExecutorService {
 			try {
 				command.run();
 			} finally {
-				Thread.currentThread().setName(mIdleThreadName);
+				Thread.currentThread().setName(threadName);
 				mExecutor.execute(mInternalCommand);
 			}
 		}
