@@ -18,3 +18,20 @@ try {
 
 Assert.assertTrue(listener.isTestEventCalled());
 }}}
+
+== Using ExecutorService ==
+
+MyApplication.java
+{{{
+ExecutorService sGlobalExecutor = Executors.newScheduledThreadPool(7);
+}}}
+
+MyEventSender.java
+{{{
+QueueEventManager em = new QueueEventManager(MyApplication.sGlobalExecutor);
+
+em.invoke(this, new TestEventArgs(1));  // Could be executed by thread 1
+em.invoke(this, new TestEventArgs(2));  // could be executed by thread 2
+
+// however, the listener will received event 1 then followed by event 2.
+}}}
